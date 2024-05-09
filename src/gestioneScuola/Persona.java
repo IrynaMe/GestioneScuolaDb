@@ -118,4 +118,18 @@ public class Persona {
 	public void setRuolo(Ruolo ruolo) {
 		this.ruolo = ruolo;
 	}
+
+	@Override
+	public String toString() {
+		return  ruolo +": "+
+				"codice fiscalef='" + cf + '\'' +
+				", nome='" + nome + '\'' +
+				", cognome='" + cognome + '\'' +
+				", sesso='" + sesso + '\'' +
+				", statoNascita='" + statoNascita + '\'' +
+				", provinciaNascita='" + provinciaNascita + '\'' +
+				", comuneNascita='" + comuneNascita + '\'' +
+				", dataNascita=" + dataNascita +
+				", email='" + email;
+	}
 } //

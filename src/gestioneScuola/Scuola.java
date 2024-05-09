@@ -189,6 +189,7 @@ public class Scuola {
 
                 Persona persona = new Persona(cf, nome, cognome, sesso, statoNascita,
                         provinciaNascita, comuneNascita, dataNascita, email);
+                persona.setRuolo(ruolo);
                 persone.add(persona);
             }
         } catch (SQLException e) {
