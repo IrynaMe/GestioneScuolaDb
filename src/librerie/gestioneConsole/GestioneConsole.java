@@ -41,7 +41,7 @@ public class GestioneConsole {
             } else {
                 System.out.println("Scelta non valida, riprova");
             }
-        } while (input==null||input <= 0 && input > menuOptions.length);
+        } while (input <= 0 || input > menuOptions.length);
 
         return votoMenuSchelto;
     }
