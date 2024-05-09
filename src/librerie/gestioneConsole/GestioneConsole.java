@@ -1,6 +1,5 @@
 package librerie.gestioneConsole;
 
-import gestioneMenu.MenuAllievo;
 import gestioneScuola.Ruolo;
 import gestioneScuola.VotoMenu;
 

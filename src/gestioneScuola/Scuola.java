@@ -51,19 +51,19 @@ public class Scuola {
                         System.out.println("Tabella di inserimento non definita");
                     }
                     break;
-                case CAMBIA_STATO_PERSONA:
+            /*    case CAMBIA_STATO_PERSONA:
                     Ruolo ruolo1 = gc.scegliRuolo();
                     // cambiaStatoPersona(Persona p);
                     break;
                 case MODIFICA_PERSONA:
                     Ruolo ruolo2 = gc.scegliRuolo();
                     modifica();
-                    break;
+                    break;*/
                 case STAMPA_LISTA_PERSONE:
                     Ruolo ruolo3 = gc.scegliRuolo();
                    stampaListaPersone(ruolo3);
                     break;
-                case AGGIUNGI_MATERIA:
+              /*  case AGGIUNGI_MATERIA:
                     //...
                     break;
                 case CAMBIA_STATO_MATERIA:
@@ -83,7 +83,7 @@ public class Scuola {
                     break;
                 case CAMBIA_STATO_CLASSE:
                     //...
-                    break;
+                    break;*/
                 case ESCI:
                     System.out.println("Arrivederci!");
                     // chiudo connessione db
