@@ -9,12 +9,21 @@ public class Prova {
 	private String cfAllievo;
 	private String cfDocente;
 	private String materia;
+	private int abilitato;
 
 	public Prova(LocalDateTime dataOra, String cfAllievo, String cfDocente, String materia) {
 		this.dataOra = dataOra;
 		this.cfAllievo = cfAllievo;
 		this.cfDocente = cfDocente;
 		this.materia = materia;
+	}
+
+	public int getAbilitato() {
+		return abilitato;
+	}
+
+	public void setAbilitato(int abilitato) {
+		this.abilitato = abilitato;
 	}
 
 	public LocalDateTime getDataOra() {

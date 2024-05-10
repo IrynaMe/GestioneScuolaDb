@@ -33,9 +33,10 @@ public class GestioneConsole {
             menuOptions = MenuDocente.values();
         } else if (entita.equals(Entita.PROVA)) {
             menuOptions = MenuProva.values();
-        } else if (entita.equals(Entita.MATERIA)) {
-            menuOptions = MenuMateria.values();
         }
+      /*  else if (entita.equals(Entita.MATERIA)) {
+            menuOptions = MenuMateria.values();
+        }*/
         //stampo 1 dei menu dependendo dall aentita
         do{
             System.out.println("*********************************");

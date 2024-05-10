@@ -3,10 +3,19 @@ package gestioneScuola;
 public class Classe {
     private int livello;
     private String sezione;
+    private int abilitato;
 
     public Classe(int livello, String sezione) {
         this.livello = livello;
         this.sezione = sezione;
+    }
+
+    public int getAbilitato() {
+        return abilitato;
+    }
+
+    public void setAbilitato(int abilitato) {
+        this.abilitato = abilitato;
     }
 
     public int getLivello() {
