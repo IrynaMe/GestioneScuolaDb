@@ -9,13 +9,23 @@ public class Prova {
 	private String cfAllievo;
 	private String cfDocente;
 	private String nomeMateria;
+	private int voto;
 	private int abilitato;
 
-	public Prova(LocalDateTime dataOra, String cfAllievo, String cfDocente, String materia) {
+	public Prova(LocalDateTime dataOra, String cfAllievo, String cfDocente, String nomeMateria, int voto) {
 		this.dataOra = dataOra;
 		this.cfAllievo = cfAllievo;
 		this.cfDocente = cfDocente;
-		this.nomeMateria = materia;
+		this.nomeMateria = nomeMateria;
+		this.voto = voto;
+	}
+
+	public int getVoto() {
+		return voto;
+	}
+
+	public void setVoto(int voto) {
+		this.voto = voto;
 	}
 
 	public int getAbilitato() {
@@ -56,5 +66,16 @@ public class Prova {
 
 	public void setNomeMateria(String nomeMateria) {
 		this.nomeMateria = nomeMateria;
+	}
+
+	@Override
+	public String toString() {
+		return "Prova:" +
+				"dataOra=" + dataOra +
+				", cfAllievo='" + cfAllievo + '\'' +
+				", cfDocente='" + cfDocente + '\'' +
+				", nomeMateria='" + nomeMateria + '\'' +
+				", voto=" + voto +
+				", abilitato=" + abilitato;
 	}
 }

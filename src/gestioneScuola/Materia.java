@@ -1,20 +1,20 @@
 package gestioneScuola;
 
 public class Materia {
-    private int codice;
+    private String codice;
     private String nomeMateria;
     private int abilitato;
 
-    public Materia(int codice, String nomeMateria) {
+    public Materia(String codice, String nomeMateria) {
         this.codice = codice;
         this.nomeMateria = nomeMateria;
     }
 
-    public int getCodice() {
+    public String getCodice() {
         return codice;
     }
 
-    public void setCodice(int codice) {
+    public void setCodice(String codice) {
         this.codice = codice;
     }
 
@@ -32,5 +32,14 @@ public class Materia {
 
     public void setAbilitato(int abilitato) {
         this.abilitato = abilitato;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Materia:" +
+                "codice='" + codice + '\'' +
+                ", nomeMateria='" + nomeMateria + '\'' +
+                ", abilitato=" + abilitato;
     }
 }

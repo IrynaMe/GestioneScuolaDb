@@ -33,10 +33,9 @@ public class GestioneConsole {
             menuOptions = MenuDocente.values();
         } else if (entita.equals(Entita.PROVA)) {
             menuOptions = MenuProva.values();
-        }
-      /*  else if (entita.equals(Entita.MATERIA)) {
+        } else if (entita.equals(Entita.MATERIA)) {
             menuOptions = MenuMateria.values();
-        }*/
+        }
         //stampo 1 dei menu dependendo dall aentita
         do{
             System.out.println("*********************************");
@@ -268,14 +267,14 @@ public class GestioneConsole {
     }
 
     public LocalTime dammiOra(String msgShow, String msgRetry, String msgError,
-                              String msgSuccess, int tentativi, String minHour, String maxHour) {
+                              String msgSuccess, int tentativi) {
 
-        if (minHour.length() != 2 || maxHour.length() != 2) {
+       /* if (minHour.length() != 2 || maxHour.length() != 2) {
             System.out.println("Range di ore non valido, deve essere formsto hh (2 caratteri)");
-        }
+        }*/
         String input = null;
         LocalTime localTime = null;
-        String regexTime = "^(" + minHour + "|" + maxHour + "):[0-5][0-9]:[0-5][0-9]$";
+        String regexTime = "^([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$";
         do {
             System.out.println(msgShow);
             input = sc.nextLine().trim();

@@ -4,7 +4,7 @@ public enum Entita {
     DOCENTE("Operazioni con docente"),
     ALLIEVO("Operazioni con allievo"),
     AMMINISTRATIVO("Operazioni con amministrativo"),
-   // MATERIA("Operazioni con materia"),
+    MATERIA("Operazioni con materia"),
     //CLASSE(Operazione con classe,
     PROVA("Operazioni con prova"),
     NON_DEFINITO("Esci");
