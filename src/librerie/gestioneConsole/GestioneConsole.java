@@ -1,7 +1,8 @@
 package librerie.gestioneConsole;
 
-import gestioneScuola.Ruolo;
-import gestioneScuola.VotoMenu;
+import gestioneScuola.Entita;
+
+import gestioneScuola.menu.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,21 +15,34 @@ public class GestioneConsole {
     private Scanner sc = new Scanner(System.in);
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_ORANGE = "\u001B[38;5;208m";
     public static final String ANSI_RESET = "\u001B[0m";
 
 
-
-    public VotoMenu stampaMenu() {
-        VotoMenu[] menuOptions = VotoMenu.values();
-        VotoMenu votoMenuSchelto = null;
-        Integer input = null;
-        do {
-            System.out.println("Menu:");
+    //riceve Entita da scegliEntita
+    public MenuInterfaccia stampaMenu(Entita entita) {
+        MenuInterfaccia[] menuOptions = null;
+        MenuInterfaccia votoMenuSchelto = null;
+        Integer input = -1;
+        //scelgo menu da usare partendo dalla entita prescelta
+        if (entita.equals(Entita.ALLIEVO)) {
+            menuOptions = MenuAllievo.values();
+        } else if (entita.equals(Entita.AMMINISTRATIVO)) {
+            menuOptions = MenuAmministrativo.values();
+        } else if (entita.equals(Entita.DOCENTE)) {
+            menuOptions = MenuDocente.values();
+        } else if (entita.equals(Entita.PROVA)) {
+            menuOptions = MenuProva.values();
+        } else if (entita.equals(Entita.MATERIA)) {
+            menuOptions = MenuMateria.values();
+        }
+        //stampo 1 dei menu dependendo dall aentita
+        do{
+            System.out.println("*********************************");
             for (int i = 0; i < menuOptions.length; i++) {
                 System.out.println((i + 1) + " -> " + menuOptions[i].getDescription());
             }
+            System.out.println();
             System.out.print("Inserisci la scelta: ");
             try {
                 input = Integer.parseInt(sc.nextLine());
@@ -36,38 +50,44 @@ public class GestioneConsole {
                 System.out.println("Input non valido, riprova");
                 continue;
             }
-            if (input!=null&&input >= 1 && input <= menuOptions.length) {
+            if (input != null && input >= 1 && input <= menuOptions.length) {
                 votoMenuSchelto = menuOptions[input - 1];
             } else {
                 System.out.println("Scelta non valida, riprova");
             }
-        } while (input <= 0 || input > menuOptions.length);
+        }while (!entita.equals(Entita.NON_DEFINITO)&&input==null);
 
         return votoMenuSchelto;
     }
 
 
-    public Ruolo scegliRuolo() {
-        Ruolo[] ruoli = Ruolo.values();
-        Ruolo ruoloScelto = null;
+    //return Entita da passare in stampaMenu per definire menu da stampare
+    public Entita scegliEntita() {
+        Entita[] arrEntita = Entita.values();
+        Entita entitaScelta = null;
 
         do {
-            for (int i = 0; i < ruoli.length; i++) {
-                System.out.println((i + 1) + " -> " + ruoli[i]);
+            System.out.println("*********************************");
+            for (int i = 0; i < arrEntita.length; i++) {
+                System.out.println((i + 1) + " -> " + arrEntita[i].getDescription());
             }
 
             System.out.print("Inserisci la scelta: ");
-            int scelta = Integer.parseInt(sc.nextLine());
+            try {
+                int scelta = Integer.parseInt(sc.nextLine());
 
-            if (scelta >= 1 && scelta <= ruoli.length) {
-                ruoloScelto = ruoli[scelta - 1];
-            } else {
-                System.out.println("Scelta errata, riprova");
+                if (scelta >= 1 && scelta <= arrEntita.length) {
+                    entitaScelta = arrEntita[scelta - 1];
+                } else {
+                    System.out.println("Scelta errata, riprova");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Input non valido, inserisci un numero corretto");
             }
 
-        } while (ruoloScelto == null);
+        } while (entitaScelta == null);
 
-        return ruoloScelto;
+        return entitaScelta;
     }
 
 

@@ -14,7 +14,7 @@ public class Persona {
 	private LocalDate dataNascita;
 	private String email;
 	private int abilitato; //1-true, 0 false- default 1 in db
-	private Ruolo ruolo;
+	private Entita entita;
 
 	public Persona(String cf, String nome, String cognome, String sesso, String statoNascita,
 				   String provinciaNascita, String comuneNascita, LocalDate dataNascita,
@@ -111,18 +111,18 @@ public class Persona {
 		this.abilitato = abilitato;
 	}
 
-	public Ruolo getRuolo() {
-		return ruolo;
+	public Entita getEntita() {
+		return entita;
 	}
 
-	public void setRuolo(Ruolo ruolo) {
-		this.ruolo = ruolo;
+	public void setEntita(Entita entita) {
+		this.entita = entita;
 	}
 
 	@Override
 	public String toString() {
-		return  ruolo +": "+
-				"codice fiscalef='" + cf + '\'' +
+		return  entita +": "+
+				"codice fiscale='" + cf + '\'' +
 				", nome='" + nome + '\'' +
 				", cognome='" + cognome + '\'' +
 				", sesso='" + sesso + '\'' +

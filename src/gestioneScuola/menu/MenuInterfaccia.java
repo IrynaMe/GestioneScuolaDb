@@ -1,7 +1,7 @@
-package gestioneScuola;
+package gestioneScuola.menu;
 
-public enum VotoMenu {
-    AGGIUNGI_PERSONA("Aggiungi persona"),
+public interface MenuInterfaccia {
+ /*   AGGIUNGI_PERSONA("Aggiungi persona"),
   //  MODIFICA_PERSONA("Modifica persona"),
  //   CAMBIA_STATO_PERSONA("Cambia stato persona: abilita/disabilita"),
     STAMPA_LISTA_PERSONE("Stampa lista persone"),
@@ -22,4 +22,15 @@ public enum VotoMenu {
     public String getDescription() {
         return description;
     }
+ ESCI("Esci");
+    private final String description;
+    VotoMenu(String description) {
+        this.description = description;
+    }
+    public String getDescription() {
+        return description;
+    }*/
+
+     String getDescription();
+
 }
