@@ -34,12 +34,9 @@ public class Scuola {
 
 
     public void gestisciSceltaMenu() {
-
         // connessione con db
         miodb.conn();
-
         // stampa menu
-
         while (true) {
             //VotoMenu votoMenu = gc.stampaMenu();
             Entita entita = gc.scegliEntita();
@@ -83,15 +80,15 @@ public class Scuola {
                   //  case MATERIA: break;
                     case NON_DEFINITO:
                         System.out.println("Arrivederci!");
+                        miodb.disconnect();
                         return;
                     default:
                         System.out.println("Scelta non valida, riprova");
                 }
-
             } else {
                 System.out.println("Arrivederci!");
+                miodb.disconnect();
             }
-
         }
     }
 
