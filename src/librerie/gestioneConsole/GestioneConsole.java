@@ -275,7 +275,7 @@ public class GestioneConsole {
         }
         String input = null;
         LocalTime localTime = null;
-        String regexTime = "^(" + minHour + "|" + maxHour + "]):[0-5][0-9]$";
+        String regexTime = "^(" + minHour + "|" + maxHour + "):[0-5][0-9]:[0-5][0-9]$";
         do {
             System.out.println(msgShow);
             input = sc.nextLine().trim();

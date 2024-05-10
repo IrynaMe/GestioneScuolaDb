@@ -3,7 +3,7 @@ package gestioneScuola.menu;
 public enum MenuAmministrativo implements MenuInterfaccia {
     AGGIUNGI_AMMINISTRATIVO("Aggiungi amministrativo"),
     //MODIFICA_AMMINISTRATIVO("Modifica amministrativo"),
-    //   CAMBIA_STATO_AMMINISTRATIVO("Cambia stato amministrativo: abilita/disabilita"),
+    CAMBIA_STATO_AMMINISTRATIVO("Cambia stato amministrativo: abilita/disabilita"),
     STAMPA_LISTA_AMMINISTRATIVO("Stampa lista amministrativo"),
     ESCI("Esci");
 

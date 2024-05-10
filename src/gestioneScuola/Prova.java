@@ -8,14 +8,14 @@ public class Prova {
 	private LocalDateTime dataOra;
 	private String cfAllievo;
 	private String cfDocente;
-	private String materia;
+	private String nomeMateria;
 	private int abilitato;
 
 	public Prova(LocalDateTime dataOra, String cfAllievo, String cfDocente, String materia) {
 		this.dataOra = dataOra;
 		this.cfAllievo = cfAllievo;
 		this.cfDocente = cfDocente;
-		this.materia = materia;
+		this.nomeMateria = materia;
 	}
 
 	public int getAbilitato() {
@@ -50,11 +50,11 @@ public class Prova {
 		this.cfDocente = cfDocente;
 	}
 
-	public String getMateria() {
-		return materia;
+	public String getNomeMateria() {
+		return nomeMateria;
 	}
 
-	public void setMateria(String materia) {
-		this.materia = materia;
+	public void setNomeMateria(String nomeMateria) {
+		this.nomeMateria = nomeMateria;
 	}
 }

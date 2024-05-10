@@ -130,6 +130,7 @@ public class Persona {
 				", provinciaNascita='" + provinciaNascita + '\'' +
 				", comuneNascita='" + comuneNascita + '\'' +
 				", dataNascita=" + dataNascita +
-				", email='" + email;
+				", email='" + email+
+				", abilitato='"+abilitato;
 	}
 } //

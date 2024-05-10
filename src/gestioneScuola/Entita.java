@@ -5,6 +5,7 @@ public enum Entita {
     ALLIEVO("Operazioni con allievo"),
     AMMINISTRATIVO("Operazioni con amministrativo"),
    // MATERIA("Operazioni con materia"),
+    //CLASSE(Operazione con classe,
     PROVA("Operazioni con prova"),
     NON_DEFINITO("Esci");
 

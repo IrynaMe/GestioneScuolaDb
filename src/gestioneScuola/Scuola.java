@@ -46,6 +46,7 @@ public class Scuola {
                         MenuInterfaccia input = gc.stampaMenu(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.AGGIUNGI_ALLIEVO)) aggiungiPersona(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.STAMPA_LISTA_ALLIEVI)) stampaListaPersone(Entita.ALLIEVO);
+                        if (input.equals(MenuAllievo.CAMBIA_STATO_ALLIEVO)) cambiaStatoPersona(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.ESCI)) {
                             System.out.println("Stai per uscire dal menu Allievo");
                             break;
@@ -55,6 +56,7 @@ public class Scuola {
                         MenuInterfaccia input1 = gc.stampaMenu(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.AGGIUNGI_DOCENTE)) aggiungiPersona(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.STAMPA_LISTA_DOCENTI)) stampaListaPersone(Entita.DOCENTE);
+                        if (input1.equals(MenuDocente.CAMBIA_STATO_DOCENTE)) cambiaStatoPersona(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.ESCI)) {
                             System.out.println("Stai per uscire dal menu Docente");
                             break;
@@ -62,8 +64,12 @@ public class Scuola {
                         break;
                     case AMMINISTRATIVO:
                         MenuInterfaccia input2 = gc.stampaMenu(Entita.AMMINISTRATIVO);
-                        if (input2.equals(MenuAmministrativo.AGGIUNGI_AMMINISTRATIVO)) aggiungiPersona(Entita.AMMINISTRATIVO);
-                        if (input2.equals(MenuAmministrativo.STAMPA_LISTA_AMMINISTRATIVO)) stampaListaPersone(Entita.AMMINISTRATIVO);
+                        if (input2.equals(MenuAmministrativo.AGGIUNGI_AMMINISTRATIVO))
+                            aggiungiPersona(Entita.AMMINISTRATIVO);
+                        if (input2.equals(MenuAmministrativo.STAMPA_LISTA_AMMINISTRATIVO))
+                            stampaListaPersone(Entita.AMMINISTRATIVO);
+                        if (input2.equals(MenuAmministrativo.CAMBIA_STATO_AMMINISTRATIVO))
+                            cambiaStatoPersona(Entita.AMMINISTRATIVO);
                         if (input2.equals(MenuAmministrativo.ESCI)) {
                             System.out.println("Stai per uscire dal menu Docente");
                             break;
@@ -77,7 +83,7 @@ public class Scuola {
                             break;
                         }
                         break;
-                  //  case MATERIA: break;
+                    //  case MATERIA: break;
                     case NON_DEFINITO:
                         System.out.println("Arrivederci!");
                         miodb.disconnect();
@@ -151,31 +157,92 @@ public class Scuola {
         miodb.writeInDb(querySql);
     }
 
-    public void cambiaStatoPersona(Entita entita) {
-        String querySql = null;
-        String nomeTabella = null;
-
-    }
-
-    public void stampaListaPersone(Entita entita) {
+    public Persona cercaPersonaPerCf(Entita entita) {
         String nomeTabella = null;
         String sqlQuery = null;
-        int index = 0;
+        String cf = null;
+        Persona persona = null;
+
+        if (entita.equals(Entita.ALLIEVO) || entita.equals(Entita.AMMINISTRATIVO) || entita.equals(Entita.DOCENTE)) {
+            //definisco tabella da inserire query.
+            nomeTabella = getNomeTabella(entita);
+            cf = gc.dammiCodiceFiscale("Inserisci codice fiscale di " + nomeTabella, "Input non valido, riprova", "I dati non sono inseriti",
+                    "CF inserito con successo", 3);
+
+            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE cf = '" + cf + "'";
+
+            ResultSet resultSet = miodb.readInDb(sqlQuery);
+            try {
+                while (resultSet.next()) {
+                    String cfPersona = resultSet.getString("cf");
+                    String nome = resultSet.getString("nome");
+                    String cognome = resultSet.getString("cognome");
+                    String sesso = resultSet.getString("sesso");
+                    String statoNascita = resultSet.getString("stato_nascita");
+                    String provinciaNascita = resultSet.getString("provincia_nascita");
+                    String comuneNascita = resultSet.getString("comune_nascita");
+                    LocalDate dataNascita = resultSet.getDate("data_nascita").toLocalDate();
+                    String email = resultSet.getString("email");
+                    int abilitato = resultSet.getInt("abilitato");
+
+                    persona = new Persona(cf, nome, cognome, sesso, statoNascita,
+                            provinciaNascita, comuneNascita, dataNascita, email);
+                    persona.setEntita(entita);
+                    persona.setAbilitato(abilitato);
+
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Problema di lettura dal db: " + e);
+            }
+
+            if (resultSet != null) {
+                System.out.println(nomeTabella + " trovato: " + persona.toString());
+
+            } else {
+                System.out.println("Non ci sono persone con cf inserito");
+            }
+
+
+        } else {
+            System.out.println("Tabella di inserimento non definita");
+        }
+
+
+        return persona;
+    }
+/*
+    public Materia cercaMateriaPerCodice(Entita entita){
+        String nomeTabella = null;
+        String sqlQuery = null;
+        String cf = null;
+        Materia materia = null;
+
 
         //definisco tabella da inserire query. Inserimento ruolo errato è gestito nel gestisciSceltaMenu
         if (entita.equals(Entita.ALLIEVO)) {
             nomeTabella = "allievo";
+            cf = gc.dammiCodiceFiscale("Inserisci codice fiscale di " + nomeTabella, "Input non valido, riprova", "I dati non sono inseriti",
+                    "CF inserito con successo", 3);
+            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE cf = '" + cf + "'";
         } else if (entita.equals(Entita.DOCENTE)) {
             nomeTabella = "docente";
+            cf = gc.dammiCodiceFiscale("Inserisci codice fiscale di " + nomeTabella, "Input non valido, riprova", "I dati non sono inseriti",
+                    "CF inserito con successo", 3);
+            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE cf = '" + cf + "'";
         } else if (entita.equals(Entita.AMMINISTRATIVO)) {
             nomeTabella = "amministrativo";
+            cf = gc.dammiCodiceFiscale("Inserisci codice fiscale di " + nomeTabella, "Input non valido, riprova", "I dati non sono inseriti",
+                    "CF inserito con successo", 3);
+            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE cf = '" + cf + "'";
+        } else {
+            System.out.println("Tabella di inserimento non definita");
         }
-        //creo SqlQuery per prendere tutti abilitati
-        sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE abilitato = 1";
+
         ResultSet resultSet = miodb.readInDb(sqlQuery);
         try {
             while (resultSet.next()) {
-                String cf = resultSet.getString("cf");
+                String cfPersona = resultSet.getString("cf");
                 String nome = resultSet.getString("nome");
                 String cognome = resultSet.getString("cognome");
                 String sesso = resultSet.getString("sesso");
@@ -186,22 +253,144 @@ public class Scuola {
                 String email = resultSet.getString("email");
                 int abilitato = resultSet.getInt("abilitato");
 
-                Persona persona = new Persona(cf, nome, cognome, sesso, statoNascita,
+                persona = new Persona(cf, nome, cognome, sesso, statoNascita,
                         provinciaNascita, comuneNascita, dataNascita, email);
                 persona.setEntita(entita);
-                persone.add(persona);
+                if (persona.getAbilitato() == 0) {
+                    persona.setAbilitato(1);
+                } else {
+                    persona.setAbilitato(0);
+                }
+
             }
         } catch (SQLException e) {
             System.out.println("Problema di lettura dal db: " + e);
         }
         if (resultSet != null) {
-            //stampo persone dall arraylist
-            System.out.println("Lista delle persone definite come " + nomeTabella);
-            for (Persona persona : persone) {
-                System.out.println(++index + " -> " + persona);
-            }
+            System.out.println(nomeTabella + " trovato: " + persona.toString());
         } else {
-            System.out.println("Non ci sono persone definite come " + nomeTabella);
+            System.out.println("Non ci sono persone con cf inserito");
+        }
+        return persona;
+    }
+*/
+
+    private String getNomeTabella(Entita entita) {
+        switch (entita) {
+            case ALLIEVO:
+                return "allievo";
+            case DOCENTE:
+                return "docente";
+            case AMMINISTRATIVO:
+                return "amministrativo";
+            // case MATERIA: return "materia";
+            case PROVA:
+                return "prova";
+            default:
+                return null;
+        }
+    }
+
+    public void cambiaStatoPersona(Entita entita) {
+        Persona persona = cercaPersonaPerCf(entita);
+        if (persona != null) {
+            int nuovoStato = (persona.getAbilitato() == 0) ? 1 : 0;
+            String nomeTabella = getNomeTabella(entita);
+            String sqlQuery = "UPDATE " + nomeTabella + " SET abilitato = " + nuovoStato + " WHERE cf = '" + persona.getCf() + "'";
+
+            miodb.writeInDb(sqlQuery);
+        } else {
+            System.out.println("Persona non trovata.");
+        }
+    }
+
+
+  /*  public void cambiaStatoMateria(Entita entita) {
+        String codiceMateria;
+        if (entita.equals(Entita.MATERIA)) {
+            nomeTabella = "materia";
+            codiceMateria = gc.dammiStringa("Inserisci stato di nascita di " + nomeTabella, "Input non valido, riprova", "I dati non sono inseriti",
+                    "Stato di nascita inserita con successo", 3, 1, 10);
+            //creo SqlQuery
+            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE codice = '" + codiceMateria + "'";
+        }
+
+    }*/
+
+/*    public void cambiaStatoProva(Entita entita) {
+        LocalDateTime dataOraProva = null;
+
+        if (entita.equals(Entita.PROVA)) {
+            nomeTabella = "prova";
+            LocalDate dataProva = gc.dammiData("Inserisci data di prova in formato dd-mm-yyyy  ", "Input non valido, riprova", "I dati non sono inseriti", "La data inseriti con successo", 3, 1920, 2018);
+            LocalTime oraProva = gc.dammiOra("Inserisci ora di prova in formato: HH:mm:ss", "Input non valido, riprova", "I dati non sono inseriti", "La data inseriti con successo", 3, "08", "23");
+            dataOraProva = dataProva.atTime(oraProva);
+            //creo SqlQuery
+            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE data_ora = '" + dataOraProva + "'";
+        }
+    }*/
+
+ /*   public void cambiaStatoClasse(Entita entita) {
+        Integer livelloClasse = null;
+        String sezioneClasse = null;
+        if (entita.equals(Entita.CLASSE)) {
+            nomeTabella = "classe";
+            livelloClasse = gc.dammiIntero("Inserisci livello di classe", "Input non valido, riprova", "I dati non sono inseriti",
+                    "Stato di nascita inserita con successo", 3, 1, 12);
+            codiceMateria = gc.dammiStringa("Inserisci sezione di classe ", "Input non valido, riprova", "I dati non sono inseriti",
+                    "Stato di nascita inserita con successo", 3, 1, 2);
+            //creo SqlQuery
+            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE livello = '" + livelloClasse + "' AND sezione= '" + sezioneClasse + "'";
+        }
+    }*/
+
+    public void stampaListaPersone(Entita entita) {
+        String nomeTabella = null;
+        String sqlQuery = null;
+        int index = 0;
+
+        //definisco tabella da inserire query. Inserimento ruolo errato è gestito nel gestisciSceltaMenu
+        if (entita.equals(Entita.ALLIEVO) || entita.equals(Entita.AMMINISTRATIVO) || entita.equals(Entita.DOCENTE)) {
+            //definisco tabella da inserire query.
+            nomeTabella = getNomeTabella(entita);
+
+            //creo SqlQuery per prendere tutti abilitati
+            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE abilitato = 1";
+            ResultSet resultSet = miodb.readInDb(sqlQuery);
+            try {
+                while (resultSet.next()) {
+                    String cf = resultSet.getString("cf");
+                    String nome = resultSet.getString("nome");
+                    String cognome = resultSet.getString("cognome");
+                    String sesso = resultSet.getString("sesso");
+                    String statoNascita = resultSet.getString("stato_nascita");
+                    String provinciaNascita = resultSet.getString("provincia_nascita");
+                    String comuneNascita = resultSet.getString("comune_nascita");
+                    LocalDate dataNascita = resultSet.getDate("data_nascita").toLocalDate();
+                    String email = resultSet.getString("email");
+                    int abilitato = resultSet.getInt("abilitato");
+
+                    Persona persona = new Persona(cf, nome, cognome, sesso, statoNascita,
+                            provinciaNascita, comuneNascita, dataNascita, email);
+                    persona.setEntita(entita);
+                    persone.add(persona);
+                }
+            } catch (SQLException e) {
+                System.out.println("Problema di lettura dal db: " + e);
+            }
+            if (resultSet != null) {
+                //stampo persone dall arraylist
+                System.out.println("Lista delle persone definite come " + nomeTabella);
+                for (Persona persona : persone) {
+                    System.out.println(++index + " -> " + persona);
+                }
+            } else {
+                System.out.println("Non ci sono persone definite come " + nomeTabella);
+            }
+
+
+        } else {
+            System.out.println("Tabella di inserimento non defifnita");
         }
 
     }
@@ -232,12 +421,11 @@ public class Scuola {
 
 
             //creo oggetto
-            //LocalDateTime dataOra, String cfAllievo, String cfDocente, String materia
             Prova prova = new Prova(dataOraProva, cfAllievo, cfDocente, nomeMateria);
 
             //creo querySql da passare in writeInDb
             String sqlQuery = "INSERT INTO prova (data_ora, cf_allievo, cf_docente, nome_materia) " +
-                    "VALUES ('2024-05-15 10:30:00', 'cfAllievoValue', 'cfDocenteValue', 'nomeMateriaValue')";
+                    "VALUES ('" + prova.getDataOra() + "', '" + prova.getCfAllievo() + "', '" + prova.getCfDocente() + "', '" + prova.getNomeMateria() + "')";
 
             //scrivo in db
             miodb.writeInDb(querySql);
@@ -247,4 +435,5 @@ public class Scuola {
         }
     }
 
-}
+
+}//
