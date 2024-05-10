@@ -33,4 +33,12 @@ public class Classe {
     public void setSezione(String sezione) {
         this.sezione = sezione;
     }
+
+    @Override
+    public String toString() {
+        return "Classe:" +
+                "livello=" + livello +
+                ", sezione='" + sezione + '\'' +
+                ", abilitato=" + abilitato;
+    }
 }//

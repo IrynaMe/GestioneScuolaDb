@@ -45,6 +45,7 @@ public class Scuola {
                 switch (entita) {
                     case ALLIEVO:
                         MenuInterfaccia input = gc.stampaMenu(Entita.ALLIEVO);
+                        if (input.equals(MenuAllievo.CERCA_ALLIEVO)) cercaPersonaPerCf(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.AGGIUNGI_ALLIEVO)) aggiungiPersona(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.STAMPA_LISTA_ALLIEVI)) stampaListaPersone(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.CAMBIA_STATO_ALLIEVO)) cambiaStatoPersona(Entita.ALLIEVO);
@@ -55,6 +56,7 @@ public class Scuola {
                         break;
                     case DOCENTE:
                         MenuInterfaccia input1 = gc.stampaMenu(Entita.DOCENTE);
+                        if (input1.equals(MenuDocente.CERCA_DOCENTE)) cercaPersonaPerCf(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.AGGIUNGI_DOCENTE)) aggiungiPersona(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.STAMPA_LISTA_DOCENTI)) stampaListaPersone(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.CAMBIA_STATO_DOCENTE)) cambiaStatoPersona(Entita.DOCENTE);
@@ -65,6 +67,7 @@ public class Scuola {
                         break;
                     case AMMINISTRATIVO:
                         MenuInterfaccia input2 = gc.stampaMenu(Entita.AMMINISTRATIVO);
+                        if (input2.equals(MenuAmministrativo.CERCA_AMMINISTRATIVO)) cercaPersonaPerCf(Entita.AMMINISTRATIVO);
                         if (input2.equals(MenuAmministrativo.AGGIUNGI_AMMINISTRATIVO))
                             aggiungiPersona(Entita.AMMINISTRATIVO);
                         if (input2.equals(MenuAmministrativo.STAMPA_LISTA_AMMINISTRATIVO))
@@ -78,6 +81,7 @@ public class Scuola {
                         break;
                     case PROVA:
                         MenuInterfaccia input3 = gc.stampaMenu(Entita.PROVA);
+                        if (input3.equals(MenuProva.CERCA_PROVA)) cercaProvaPerDataOra(Entita.PROVA);
                         if (input3.equals(MenuProva.AGGIUNGI_PROVA_ALLIEVO)) aggiungiProva(Entita.PROVA);
                         if (input3.equals(MenuProva.CAMBIA_STATO_PROVA)) cambiaStatoProva(Entita.PROVA);
                         if (input3.equals(MenuProva.ESCI)) {
@@ -86,10 +90,21 @@ public class Scuola {
                         }
                         break;
                     case MATERIA:
+
                         MenuInterfaccia input4 = gc.stampaMenu(Entita.MATERIA);
+                        if (input4.equals(MenuMateria.CERCA_MATERIA)) cercaMateriaPerCodice(Entita.MATERIA);
                         if (input4.equals(MenuMateria.CAMBIA_STATO_MATERIA)) cambiaStatoMateria(Entita.MATERIA);
                         if (input4.equals(MenuMateria.ESCI)) {
                             System.out.println("Stai per uscire dal menu Materia");
+                            break;
+                        }
+                        break;
+                    case CLASSE:
+                        MenuInterfaccia input5= gc.stampaMenu(Entita.CLASSE);
+                        if (input5.equals(MenuClasse.CERCA_CLASSE)) cercaClassePerLivelloSezione(Entita.CLASSE);
+                        if (input5.equals(MenuClasse.CAMBIA_STATO_CLASSE)) cambiaStatoClasse(Entita.CLASSE);
+                        if (input5.equals(MenuClasse.ESCI)) {
+                            System.out.println("Stai per uscire dal menu Classe");
                             break;
                         }
                         break;
@@ -224,7 +239,6 @@ public class Scuola {
     public Materia cercaMateriaPerCodice(Entita entita){
 
         String sqlQuery = null;
-        String cf = null;
         Materia materia = null;
         String codiceMateria;
         if (entita.equals(Entita.MATERIA)) {
@@ -256,6 +270,56 @@ public class Scuola {
         return materia;
     }
 
+    public Classe cercaClassePerLivelloSezione(Entita entita){
+        String sqlQuery = null;
+
+        Classe classe = null;
+        String sezione=null;
+        Integer livello=null;
+        if (entita.equals(Entita.MATERIA)) {
+
+            livello = gc.dammiIntero("Inserisci livello da 1 a 4", "Input non valido, riprova", "I dati non sono inseriti",
+                    "Stato di nascita inserita con successo", 3, 1, 4);
+            sezione = gc.dammiStringa("Inserisci sezione ", "Input non valido, riprova", "I dati non sono inseriti",
+                    "Stato di nascita inserita con successo", 3, 1, 2);
+            //creo SqlQuery
+            sqlQuery = "SELECT * FROM classe WHERE livello = '" + livello + "' AND sezione = '" + sezione + "'";
+
+            ResultSet resultSet = miodb.readInDb(sqlQuery);
+            try {
+                while (resultSet.next()) {
+                    Integer livelloTab = resultSet.getInt("livello");
+                    String sezioneTab = resultSet.getString("sezione");
+                    int abilitato = resultSet.getInt("abilitato");
+                    classe=new Classe(livelloTab,sezioneTab);
+                    classe.setAbilitato(abilitato);
+                }
+            } catch (SQLException e) {
+                System.out.println("Problema di lettura dal db: " + e);
+            }
+            if (resultSet != null) {
+                System.out.println("Trovato: " + classe.toString());
+            } else {
+                System.out.println("Non ci sono classe con livello e sezione inseriti");
+            }
+        }else{
+            System.out.println("Tabella non definita");
+        }
+        return classe;
+    }
+    public void cambiaStatoClasse(Entita entita) {
+        Classe classe=cercaClassePerLivelloSezione(entita);
+        if (classe != null) {
+            int nuovoStato = (classe.getAbilitato() == 0) ? 1 : 0;
+            String nomeTabella = getNomeTabella(entita);
+            String sqlQuery = "UPDATE classe SET abilitato = " + nuovoStato + " WHERE livello = '" + classe.getLivello() + "' AND sezione = '" + classe.getSezione() +"'";
+
+            miodb.writeInDb(sqlQuery);
+            System.out.println("Stato di classeè cambiato per: "+nuovoStato);
+        } else {
+            System.out.println("Stato di classe non è cambiato");
+        }
+    }
     public void cambiaStatoMateria(Entita entita) {
         Materia materia = cercaMateriaPerCodice(entita);
         if (materia != null) {
@@ -354,19 +418,8 @@ public Prova cercaProvaPerDataOra(Entita entita){
        }
     }
 
- /*   public void cambiaStatoClasse(Entita entita) {
-        Integer livelloClasse = null;
-        String sezioneClasse = null;
-        if (entita.equals(Entita.CLASSE)) {
-            nomeTabella = "classe";
-            livelloClasse = gc.dammiIntero("Inserisci livello di classe", "Input non valido, riprova", "I dati non sono inseriti",
-                    "Stato di nascita inserita con successo", 3, 1, 12);
-            codiceMateria = gc.dammiStringa("Inserisci sezione di classe ", "Input non valido, riprova", "I dati non sono inseriti",
-                    "Stato di nascita inserita con successo", 3, 1, 2);
-            //creo SqlQuery
-            sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE livello = '" + livelloClasse + "' AND sezione= '" + sezioneClasse + "'";
-        }
-    }*/
+
+
 
     public void stampaListaPersone(Entita entita) {
         String nomeTabella = null;
