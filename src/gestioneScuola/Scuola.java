@@ -33,6 +33,46 @@ public class Scuola {
         this.persone = new ArrayList<>();
     }
 
+    //riceve Entita da scegliEntita
+    public MenuInterfaccia stampaMenu(Entita entita) {
+        MenuInterfaccia[] menuOptions = null;
+        MenuInterfaccia votoMenuSchelto = null;
+        Integer input = -1;
+        //scelgo menu da usare partendo dalla entita prescelta
+        if (entita.equals(Entita.ALLIEVO)) {
+            menuOptions = MenuAllievo.values();
+        } else if (entita.equals(Entita.AMMINISTRATIVO)) {
+            menuOptions = MenuAmministrativo.values();
+        } else if (entita.equals(Entita.DOCENTE)) {
+            menuOptions = MenuDocente.values();
+        } else if (entita.equals(Entita.PROVA)) {
+            menuOptions = MenuProva.values();
+        } else if (entita.equals(Entita.MATERIA)) {
+            menuOptions = MenuMateria.values();
+        }
+        //stampo 1 dei menu dependendo dall aentita
+        do{
+            System.out.println("*********************************");
+            for (int i = 0; i < menuOptions.length; i++) {
+                System.out.println((i + 1) + " -> " + menuOptions[i].getDescription());
+            }
+            System.out.println();
+            System.out.print("Inserisci la scelta: ");
+            try {
+                input = gc.dammiIntero("Inserisci la scelta: ","Inserimento errato, riprova","Inseromento non è andato con successo","Inserimento corretto",5,1,menuOptions.length);
+            } catch (NumberFormatException e) {
+                System.out.println("Input non valido, riprova");
+                continue;
+            }
+            if (input != null && input >= 1 && input <= menuOptions.length) {
+                votoMenuSchelto = menuOptions[input - 1];
+            } else {
+                System.out.println("Scelta non valida, riprova");
+            }
+        }while (!entita.equals(Entita.NON_DEFINITO)&&input==null);
+
+        return votoMenuSchelto;
+    }
 
     public void gestisciSceltaMenu() {
         // connessione con db
@@ -44,7 +84,7 @@ public class Scuola {
             if (entita != null) {
                 switch (entita) {
                     case ALLIEVO:
-                        MenuInterfaccia input = gc.stampaMenu(Entita.ALLIEVO);
+                        MenuInterfaccia input = stampaMenu(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.CERCA_ALLIEVO)) cercaPersonaPerCf(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.AGGIUNGI_ALLIEVO)) aggiungiPersona(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.STAMPA_LISTA_ALLIEVI)) stampaListaPersone(Entita.ALLIEVO);
@@ -55,7 +95,7 @@ public class Scuola {
                         }
                         break;
                     case DOCENTE:
-                        MenuInterfaccia input1 = gc.stampaMenu(Entita.DOCENTE);
+                        MenuInterfaccia input1 = stampaMenu(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.CERCA_DOCENTE)) cercaPersonaPerCf(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.AGGIUNGI_DOCENTE)) aggiungiPersona(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.STAMPA_LISTA_DOCENTI)) stampaListaPersone(Entita.DOCENTE);
@@ -66,7 +106,7 @@ public class Scuola {
                         }
                         break;
                     case AMMINISTRATIVO:
-                        MenuInterfaccia input2 = gc.stampaMenu(Entita.AMMINISTRATIVO);
+                        MenuInterfaccia input2 = stampaMenu(Entita.AMMINISTRATIVO);
                         if (input2.equals(MenuAmministrativo.CERCA_AMMINISTRATIVO)) cercaPersonaPerCf(Entita.AMMINISTRATIVO);
                         if (input2.equals(MenuAmministrativo.AGGIUNGI_AMMINISTRATIVO))
                             aggiungiPersona(Entita.AMMINISTRATIVO);
@@ -80,7 +120,7 @@ public class Scuola {
                         }
                         break;
                     case PROVA:
-                        MenuInterfaccia input3 = gc.stampaMenu(Entita.PROVA);
+                        MenuInterfaccia input3 = stampaMenu(Entita.PROVA);
                         if (input3.equals(MenuProva.CERCA_PROVA)) cercaProvaPerDataOra(Entita.PROVA);
                         if (input3.equals(MenuProva.AGGIUNGI_PROVA_ALLIEVO)) aggiungiProva(Entita.PROVA);
                         if (input3.equals(MenuProva.CAMBIA_STATO_PROVA)) cambiaStatoProva(Entita.PROVA);
@@ -91,7 +131,7 @@ public class Scuola {
                         break;
                     case MATERIA:
 
-                        MenuInterfaccia input4 = gc.stampaMenu(Entita.MATERIA);
+                        MenuInterfaccia input4 = stampaMenu(Entita.MATERIA);
                         if (input4.equals(MenuMateria.CERCA_MATERIA)) cercaMateriaPerCodice(Entita.MATERIA);
                         if (input4.equals(MenuMateria.CAMBIA_STATO_MATERIA)) cambiaStatoMateria(Entita.MATERIA);
                         if (input4.equals(MenuMateria.ESCI)) {
@@ -100,7 +140,7 @@ public class Scuola {
                         }
                         break;
                     case CLASSE:
-                        MenuInterfaccia input5= gc.stampaMenu(Entita.CLASSE);
+                        MenuInterfaccia input5= stampaMenu(Entita.CLASSE);
                         if (input5.equals(MenuClasse.CERCA_CLASSE)) cercaClassePerLivelloSezione(Entita.CLASSE);
                         if (input5.equals(MenuClasse.CAMBIA_STATO_CLASSE)) cambiaStatoClasse(Entita.CLASSE);
                         if (input5.equals(MenuClasse.ESCI)) {

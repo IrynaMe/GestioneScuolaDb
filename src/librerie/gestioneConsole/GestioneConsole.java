@@ -19,46 +19,7 @@ public class GestioneConsole {
     public static final String ANSI_RESET = "\u001B[0m";
 
 
-    //riceve Entita da scegliEntita
-    public MenuInterfaccia stampaMenu(Entita entita) {
-        MenuInterfaccia[] menuOptions = null;
-        MenuInterfaccia votoMenuSchelto = null;
-        Integer input = -1;
-        //scelgo menu da usare partendo dalla entita prescelta
-        if (entita.equals(Entita.ALLIEVO)) {
-            menuOptions = MenuAllievo.values();
-        } else if (entita.equals(Entita.AMMINISTRATIVO)) {
-            menuOptions = MenuAmministrativo.values();
-        } else if (entita.equals(Entita.DOCENTE)) {
-            menuOptions = MenuDocente.values();
-        } else if (entita.equals(Entita.PROVA)) {
-            menuOptions = MenuProva.values();
-        } else if (entita.equals(Entita.MATERIA)) {
-            menuOptions = MenuMateria.values();
-        }
-        //stampo 1 dei menu dependendo dall aentita
-        do{
-            System.out.println("*********************************");
-            for (int i = 0; i < menuOptions.length; i++) {
-                System.out.println((i + 1) + " -> " + menuOptions[i].getDescription());
-            }
-            System.out.println();
-            System.out.print("Inserisci la scelta: ");
-            try {
-                input = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Input non valido, riprova");
-                continue;
-            }
-            if (input != null && input >= 1 && input <= menuOptions.length) {
-                votoMenuSchelto = menuOptions[input - 1];
-            } else {
-                System.out.println("Scelta non valida, riprova");
-            }
-        }while (!entita.equals(Entita.NON_DEFINITO)&&input==null);
 
-        return votoMenuSchelto;
-    }
 
 
     //return Entita da passare in stampaMenu per definire menu da stampare
