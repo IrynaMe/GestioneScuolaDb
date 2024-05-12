@@ -22,34 +22,6 @@ public class GestioneConsole {
 
 
 
-    //return Entita da passare in stampaMenu per definire menu da stampare
-    public Entita scegliEntita() {
-        Entita[] arrEntita = Entita.values();
-        Entita entitaScelta = null;
-
-        do {
-            System.out.println("*********************************");
-            for (int i = 0; i < arrEntita.length; i++) {
-                System.out.println((i + 1) + " -> " + arrEntita[i].getDescription());
-            }
-
-            System.out.print("Inserisci la scelta: ");
-            try {
-                int scelta = Integer.parseInt(sc.nextLine());
-
-                if (scelta >= 1 && scelta <= arrEntita.length) {
-                    entitaScelta = arrEntita[scelta - 1];
-                } else {
-                    System.out.println("Scelta errata, riprova");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Input non valido, inserisci un numero corretto");
-            }
-
-        } while (entitaScelta == null);
-
-        return entitaScelta;
-    }
 
 
 

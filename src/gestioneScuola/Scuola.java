@@ -33,7 +33,38 @@ public class Scuola {
         this.persone = new ArrayList<>();
     }
 
-    //riceve Entita da scegliEntita
+    //Menu principale: return Entita da passare in stampaMenu per definire menu da stampare
+    public Entita scegliEntita() {
+        Entita[] arrEntita = Entita.values();
+        Entita entitaScelta = null;
+
+        do {
+            System.out.println("*** Menu principale ****");
+            System.out.println("Scegli tipologia di operazioni");
+            for (int i = 0; i < arrEntita.length; i++) {
+                System.out.println((i + 1) + " -> " + arrEntita[i].getDescription());
+            }
+
+          //  System.out.print("Inserisci la scelta: ");
+            try {
+                int scelta = gc.dammiIntero("Inserisci la scelta: ","Input non valido, riprova", "Inserimento non e andato con successo", "*** Sei entrato in submenu ***", 3,1,arrEntita.length );
+
+                if (scelta >= 1 && scelta <= arrEntita.length) {
+                    entitaScelta = arrEntita[scelta - 1];
+                } else {
+                    System.out.println("Scelta errata, riprova");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Input non valido, inserisci un numero corretto");
+            }
+
+        } while (entitaScelta == null);
+
+        return entitaScelta;
+    }
+
+
+    //SubMenu:riceve Entita da scegliEntita
     public MenuInterfaccia stampaMenu(Entita entita) {
         MenuInterfaccia[] menuOptions = null;
         MenuInterfaccia votoMenuSchelto = null;
@@ -52,14 +83,13 @@ public class Scuola {
         }
         //stampo 1 dei menu dependendo dall aentita
         do{
-            System.out.println("*********************************");
+            System.out.println("*** Specifica l'operazione ***");
             for (int i = 0; i < menuOptions.length; i++) {
                 System.out.println((i + 1) + " -> " + menuOptions[i].getDescription());
             }
-            System.out.println();
-            System.out.print("Inserisci la scelta: ");
+            System.out.println("************************");
             try {
-                input = gc.dammiIntero("Inserisci la scelta: ","Inserimento errato, riprova","Inseromento non è andato con successo","Inserimento corretto",5,1,menuOptions.length);
+                input = gc.dammiIntero("Inserisci la scelta: ","Inserimento errato, riprova","Inserimento non è andato con successo","*** Eseguimento di operazione ***",5,1,menuOptions.length);
             } catch (NumberFormatException e) {
                 System.out.println("Input non valido, riprova");
                 continue;
@@ -80,7 +110,7 @@ public class Scuola {
         // stampa menu
         while (true) {
             //VotoMenu votoMenu = gc.stampaMenu();
-            Entita entita = gc.scegliEntita();
+            Entita entita = scegliEntita();
             if (entita != null) {
                 switch (entita) {
                     case ALLIEVO:
@@ -90,7 +120,7 @@ public class Scuola {
                         if (input.equals(MenuAllievo.STAMPA_LISTA_ALLIEVI)) stampaListaPersone(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.CAMBIA_STATO_ALLIEVO)) cambiaStatoPersona(Entita.ALLIEVO);
                         if (input.equals(MenuAllievo.ESCI)) {
-                            System.out.println("Stai per uscire dal menu Allievo");
+                            System.out.println("Stai per tornare in menu principale");
                             break;
                         }
                         break;
@@ -101,7 +131,7 @@ public class Scuola {
                         if (input1.equals(MenuDocente.STAMPA_LISTA_DOCENTI)) stampaListaPersone(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.CAMBIA_STATO_DOCENTE)) cambiaStatoPersona(Entita.DOCENTE);
                         if (input1.equals(MenuDocente.ESCI)) {
-                            System.out.println("Stai per uscire dal menu Docente");
+                            System.out.println("Stai per tornare in menu principale");
                             break;
                         }
                         break;
@@ -115,7 +145,7 @@ public class Scuola {
                         if (input2.equals(MenuAmministrativo.CAMBIA_STATO_AMMINISTRATIVO))
                             cambiaStatoPersona(Entita.AMMINISTRATIVO);
                         if (input2.equals(MenuAmministrativo.ESCI)) {
-                            System.out.println("Stai per uscire dal menu Docente");
+                            System.out.println("Stai per tornare in menu principale");
                             break;
                         }
                         break;
@@ -125,7 +155,7 @@ public class Scuola {
                         if (input3.equals(MenuProva.AGGIUNGI_PROVA_ALLIEVO)) aggiungiProva(Entita.PROVA);
                         if (input3.equals(MenuProva.CAMBIA_STATO_PROVA)) cambiaStatoProva(Entita.PROVA);
                         if (input3.equals(MenuProva.ESCI)) {
-                            System.out.println("Stai per uscire dal menu Prova");
+                            System.out.println("Stai per tornare in menu principale");
                             break;
                         }
                         break;
@@ -135,7 +165,7 @@ public class Scuola {
                         if (input4.equals(MenuMateria.CERCA_MATERIA)) cercaMateriaPerCodice(Entita.MATERIA);
                         if (input4.equals(MenuMateria.CAMBIA_STATO_MATERIA)) cambiaStatoMateria(Entita.MATERIA);
                         if (input4.equals(MenuMateria.ESCI)) {
-                            System.out.println("Stai per uscire dal menu Materia");
+                            System.out.println("Stai per tornare in menu principale");
                             break;
                         }
                         break;
@@ -144,7 +174,7 @@ public class Scuola {
                         if (input5.equals(MenuClasse.CERCA_CLASSE)) cercaClassePerLivelloSezione(Entita.CLASSE);
                         if (input5.equals(MenuClasse.CAMBIA_STATO_CLASSE)) cambiaStatoClasse(Entita.CLASSE);
                         if (input5.equals(MenuClasse.ESCI)) {
-                            System.out.println("Stai per uscire dal menu Classe");
+                            System.out.println("Stai per tornare in menu principale");
                             break;
                         }
                         break;
