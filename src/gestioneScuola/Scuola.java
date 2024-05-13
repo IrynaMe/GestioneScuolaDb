@@ -155,9 +155,9 @@ public class Scuola {
                         break;
                     case PROVA:
                         MenuInterfaccia input3 = stampaMenu(Entita.PROVA);
-                        if (input3.equals(MenuProva.CERCA_PROVA)) cercaProvaPerDataOra(Entita.PROVA);
-                        if (input3.equals(MenuProva.AGGIUNGI_PROVA_ALLIEVO)) aggiungiProva(Entita.PROVA);
-                        if (input3.equals(MenuProva.CAMBIA_STATO_PROVA)) cambiaStatoProva(Entita.PROVA);
+                        if (input3.equals(MenuProva.CERCA_PROVA)) cercaProvaPerDataOra();
+                        if (input3.equals(MenuProva.AGGIUNGI_PROVA_ALLIEVO)) aggiungiProva();
+                        if (input3.equals(MenuProva.CAMBIA_STATO_PROVA)) cambiaStatoProva();
                         if (input3.equals(MenuProva.ESCI)) {
                             System.out.println("Stai per tornare in menu principale");
                             break;
@@ -166,8 +166,8 @@ public class Scuola {
                     case MATERIA:
 
                         MenuInterfaccia input4 = stampaMenu(Entita.MATERIA);
-                        if (input4.equals(MenuMateria.CERCA_MATERIA)) cercaMateriaPerCodice(Entita.MATERIA);
-                        if (input4.equals(MenuMateria.CAMBIA_STATO_MATERIA)) cambiaStatoMateria(Entita.MATERIA);
+                        if (input4.equals(MenuMateria.CERCA_MATERIA)) cercaMateriaPerCodice();
+                        if (input4.equals(MenuMateria.CAMBIA_STATO_MATERIA)) cambiaStatoMateria();
                         if (input4.equals(MenuMateria.ESCI)) {
                             System.out.println("Stai per tornare in menu principale");
                             break;
@@ -175,8 +175,8 @@ public class Scuola {
                         break;
                     case CLASSE:
                         MenuInterfaccia input5 = stampaMenu(Entita.CLASSE);
-                        if (input5.equals(MenuClasse.CERCA_CLASSE)) cercaClassePerLivelloSezione(Entita.CLASSE);
-                        if (input5.equals(MenuClasse.CAMBIA_STATO_CLASSE)) cambiaStatoClasse(Entita.CLASSE);
+                        if (input5.equals(MenuClasse.CERCA_CLASSE)) cercaClassePerLivelloSezione();
+                        if (input5.equals(MenuClasse.CAMBIA_STATO_CLASSE)) cambiaStatoClasse();
                         if (input5.equals(MenuClasse.ESCI)) {
                             System.out.println("Stai per tornare in menu principale");
                             break;
@@ -313,73 +313,66 @@ public class Scuola {
         return persona;
     }
 
-    public Materia cercaMateriaPerCodice(Entita entita) {
+    public Materia cercaMateriaPerCodice() {
         String sqlQuery = null;
         Materia materia = null;
-        String codiceMateria=null;
-
-        if (entita.equals(Entita.MATERIA)) {
-            codiceMateria = gc.dammiStringa("Inserisci codice della materia ", "Input non valido, riprova", "I dati non sono inseriti",
-                    "Codice della materia inserito con successo", 3, 1, 10).toUpperCase();
-            // Creo SqlQuery
-            sqlQuery = "SELECT * FROM materia WHERE codice = '" + codiceMateria + "' AND abilitato=1";
-            ResultSet resultSet = miodb.readInDb(sqlQuery);
-            try {
-                if (resultSet.next()) {
-                    String codice = resultSet.getString("codice");
-                    String nome = resultSet.getString("nome");
-                    int abilitato = resultSet.getInt("abilitato");
-                    materia = new Materia(codice, nome);
-                    materia.setAbilitato(abilitato);
-                    System.out.println("Trovato: " + materia.toString());
-                } else {
-                    System.out.println("Non ci sono materie con il codice inserito");
-                }
-            } catch (SQLException e) {
-                System.out.println("Problema di lettura dal db: " + e);
+        String codiceMateria = gc.dammiStringa("Inserisci codice della materia ", "Input non valido, riprova", "I dati non sono inseriti",
+                "Codice della materia inserito con successo", 3, 1, 10).toUpperCase();
+        // Creo SqlQuery
+        sqlQuery = "SELECT * FROM materia WHERE codice = '" + codiceMateria + "'";
+        ResultSet resultSet = miodb.readInDb(sqlQuery);
+        try {
+            if (resultSet.next()) {
+                String codice = resultSet.getString("codice");
+                String nome = resultSet.getString("nome");
+                int abilitato = resultSet.getInt("abilitato");
+                materia = new Materia(codice, nome);
+                materia.setAbilitato(abilitato);
+                System.out.println("Trovato: " + materia.toString());
+            } else {
+                System.out.println("Non ci sono materie con il codice inserito");
             }
-        } else {
-            System.out.println("Tabella non definita");
+        } catch (SQLException e) {
+            System.out.println("Problema di lettura dal db: " + e);
         }
+
         return materia;
     }
 
 
-    public Classe cercaClassePerLivelloSezione(Entita entita) {
+    public Classe cercaClassePerLivelloSezione() {
         String sqlQuery = null;
 
         Classe classe = null;
         String sezione = null;
         Integer livello = null;
-        if (entita.equals(Entita.CLASSE)) {
 
-            livello = gc.dammiIntero("Inserisci livello da 1 a 4", "Input non valido, riprova", "I dati non sono inseriti",
-                    "Livello inserito con successo", 3, 1, 4);
-            sezione = gc.dammiStringa("Inserisci sezione ", "Input non valido, riprova", "I dati non sono inseriti",
-                    "Sezione inserita con successo", 3, 1, 2);
-            //creo SqlQuery
-            sqlQuery = "SELECT * FROM classe WHERE livello = '" + livello + "' AND sezione = '" + sezione + "' AND abilitato=1";
 
-            ResultSet resultSet = miodb.readInDb(sqlQuery);
-            try {
-                while (resultSet.next()) {
-                    Integer livelloTab = resultSet.getInt("livello");
-                    String sezioneTab = resultSet.getString("sezione");
-                    int abilitato = resultSet.getInt("abilitato");
-                    classe = new Classe(livelloTab, sezioneTab);
-                    classe.setAbilitato(abilitato);
-                }
-            } catch (SQLException e) {
-                System.out.println("Problema di lettura dal db: " + e);
+        livello = gc.dammiIntero("Inserisci livello da 1 a 4", "Input non valido, riprova", "I dati non sono inseriti",
+                "Livello inserito con successo", 3, 1, 4);
+        sezione = gc.dammiStringa("Inserisci sezione ", "Input non valido, riprova", "I dati non sono inseriti",
+                "Sezione inserita con successo", 3, 1, 2);
+        //creo SqlQuery
+        sqlQuery = "SELECT * FROM classe WHERE livello = '" + livello + "' AND sezione = '" + sezione + "' AND abilitato=1";
+
+        ResultSet resultSet = miodb.readInDb(sqlQuery);
+        try {
+            while (resultSet.next()) {
+                Integer livelloTab = resultSet.getInt("livello");
+                String sezioneTab = resultSet.getString("sezione");
+                int abilitato = resultSet.getInt("abilitato");
+                classe = new Classe(livelloTab, sezioneTab);
+                classe.setAbilitato(abilitato);
             }
-            if (resultSet != null) {
-                System.out.println("Trovato: " + classe.toString());
-            } else {
-                System.out.println("Non ci sono classe con livello e sezione inseriti");
-            }
-        } else {
-            System.out.println("Tabella non definita");
+        } catch (SQLException e) {
+            System.out.println("Problema di lettura dal db: " + e);
         }
+        if (resultSet != null) {
+            System.out.println("Trovato: " + classe.toString());
+        } else {
+            System.out.println("Non ci sono classe con livello e sezione inseriti");
+        }
+
         return classe;
     }
 
@@ -388,7 +381,7 @@ public class Scuola {
         String cf = null;
         String annoScolastico = null;
         String sqlQueryInserimento = null;
-        Classe classe = cercaClassePerLivelloSezione(Entita.CLASSE);
+        Classe classe = cercaClassePerLivelloSezione();
         if (classe == null) {
             System.out.println("Classe non trovato");
         } else {
@@ -396,7 +389,7 @@ public class Scuola {
             if (persona == null) {
                 System.out.println("Docente non trovato");
             } else {
-                Materia materia = cercaMateriaPerCodice(Entita.MATERIA);
+                Materia materia = cercaMateriaPerCodice();
                 if (materia == null) {
                     System.out.println("Materia non trovata");
                 } else {
@@ -412,11 +405,10 @@ public class Scuola {
         }
     }
 
-    public void cambiaStatoClasse(Entita entita) {
-        Classe classe = cercaClassePerLivelloSezione(entita);
+    public void cambiaStatoClasse() {
+        Classe classe = cercaClassePerLivelloSezione();
         if (classe != null) {
             int nuovoStato = (classe.getAbilitato() == 0) ? 1 : 0;
-            String nomeTabella = getNomeTabella(entita);
             String sqlQuery = "UPDATE classe SET abilitato = " + nuovoStato + " WHERE livello = '" + classe.getLivello() + "' AND sezione = '" + classe.getSezione() + "'";
 
             miodb.writeInDb(sqlQuery);
@@ -426,8 +418,8 @@ public class Scuola {
         }
     }
 
-    public void cambiaStatoMateria(Entita entita) {
-        Materia materia = cercaMateriaPerCodice(entita);
+    public void cambiaStatoMateria() {
+        Materia materia = cercaMateriaPerCodice();
         if (materia != null) {
             int nuovoStato = (materia.getAbilitato() == 0) ? 1 : 0;
             String sqlQuery = "UPDATE materia SET abilitato = " + nuovoStato + " WHERE codice = '" + materia.getCodice() + "'";
@@ -438,6 +430,7 @@ public class Scuola {
         }
     }
 
+    //per allievo, docente, amministrativo
     private String getNomeTabella(Entita entita) {
         switch (entita) {
             case ALLIEVO:
@@ -447,8 +440,7 @@ public class Scuola {
             case AMMINISTRATIVO:
                 return "amministrativo";
             // case MATERIA: return "materia";
-            case PROVA:
-                return "prova";
+            // case PROVA:return "prova";
             default:
                 return null;
         }
@@ -468,55 +460,51 @@ public class Scuola {
     }
 
 
-    public Prova cercaProvaPerDataOra(Entita entita) {
+    public Prova cercaProvaPerDataOra() {
         String sqlQuery = null;
         LocalDateTime dataOraProva = null;
         LocalDate dataProva = null;
         LocalTime oraProva = null;
         LocalDateTime dataOraTab = null;
         Prova prova = null;
-        if (entita.equals(Entita.PROVA)) {
 
-            dataProva = gc.dammiData("Inserisci data di prova in formato dd-mm-yyyy  ", "Input non valido, riprova", "I dati non sono inseriti", "La data inseriti con successo", 3, 1920, 2018);
-            oraProva = gc.dammiOra("Inserisci ora di prova in formato: HH:mm:ss", "Input non valido, riprova", "I dati non sono inseriti", "La data inseriti con successo", 3);
-            dataOraProva = dataProva.atTime(oraProva);
-            sqlQuery = "SELECT * FROM prova WHERE data_ora = '" + dataOraProva + "'";
+        dataProva = gc.dammiData("Inserisci data di prova in formato dd-mm-yyyy  ", "Input non valido, riprova", "I dati non sono inseriti", "La data inseriti con successo", 3, 1920, 2018);
+        oraProva = gc.dammiOra("Inserisci ora di prova in formato: HH:mm:ss", "Input non valido, riprova", "I dati non sono inseriti", "La data inseriti con successo", 3);
+        dataOraProva = dataProva.atTime(oraProva);
+        sqlQuery = "SELECT * FROM prova WHERE data_ora = '" + dataOraProva + "'";
 
-            ResultSet resultSet = miodb.readInDb(sqlQuery);
-            try {
-                while (resultSet.next()) {
-                    Timestamp timestamp = resultSet.getTimestamp("data_ora");
-                    if (timestamp != null) {
-                        dataOraTab = timestamp.toLocalDateTime();
-                    }
-                    String cfAllievo = resultSet.getString("cf_allievo");
-                    String cfDocente = resultSet.getString("cf_docente");
-                    String nomeMateria = resultSet.getString("nome_materia");
-                    Integer voto = resultSet.getInt("voto");
-                    int abilitato = resultSet.getInt("abilitato");
-                    prova = new Prova(dataOraTab, cfAllievo, cfDocente, nomeMateria, voto);
-                    prova.setAbilitato(abilitato);
+        ResultSet resultSet = miodb.readInDb(sqlQuery);
+        try {
+            while (resultSet.next()) {
+                Timestamp timestamp = resultSet.getTimestamp("data_ora");
+                if (timestamp != null) {
+                    dataOraTab = timestamp.toLocalDateTime();
                 }
-            } catch (SQLException e) {
-                System.out.println("Problema di lettura dal db: " + e);
+                String cfAllievo = resultSet.getString("cf_allievo");
+                String cfDocente = resultSet.getString("cf_docente");
+                String nomeMateria = resultSet.getString("nome_materia");
+                Integer voto = resultSet.getInt("voto");
+                int abilitato = resultSet.getInt("abilitato");
+                prova = new Prova(dataOraTab, cfAllievo, cfDocente, nomeMateria, voto);
+                prova.setAbilitato(abilitato);
             }
-            if (resultSet != null) {
-                System.out.println("Trovato: " + prova.toString());
-            } else {
-                System.out.println("Non ci sono prove con data e ora inserite");
-            }
-        } else {
-            System.out.println("Tabella non definita");
+        } catch (SQLException e) {
+            System.out.println("Problema di lettura dal db: " + e);
         }
+        if (resultSet != null) {
+            System.out.println("Trovato: " + prova.toString());
+        } else {
+            System.out.println("Non ci sono prove con data e ora inserite");
+        }
+
         return prova;
 
     }
 
-    public void cambiaStatoProva(Entita entita) {
-        Prova prova = cercaProvaPerDataOra(entita);
+    public void cambiaStatoProva() {
+        Prova prova = cercaProvaPerDataOra();
         if (prova != null) {
             int nuovoStato = (prova.getAbilitato() == 0) ? 1 : 0;
-            String nomeTabella = getNomeTabella(entita);
             String sqlQuery = "UPDATE prova SET abilitato = " + nuovoStato + " WHERE data_ora = '" + prova.getDataOra() + "'";
             miodb.writeInDb(sqlQuery);
             System.out.println("Stato di prova è cambiato per: " + nuovoStato);
@@ -594,7 +582,7 @@ public class Scuola {
         Integer livelloDocente = null;
         String sezioneDocente = null;
         String materiaDocente = null;
-        int count=0;
+        int count = 0;
         //controllo per allievo, docente materia sono in stesso classe
         //controllo allievo_classe
         sqlAllievoClasse = "SELECT anno_scolastico,livello_classe, sezione_classe from allievo_in_classe where cf_allievo='" + allievo.getCf() + "'";
@@ -622,76 +610,71 @@ public class Scuola {
             System.out.println("Problema di lettura dati docente dal db: " + e);
         }
         //paragono i dati
-        if (annoAllievo.equalsIgnoreCase(annoDocente)){
+        if (annoAllievo.equalsIgnoreCase(annoDocente)) {
             count++;
 
-        }else{
+        } else {
             System.out.println("Non c'e corrispondenza dell'anno scolastico allievo e docente");
         }
-        if(livelloDocente.equals(livelloAllievo)){
+        if (livelloDocente.equals(livelloAllievo)) {
             count++;
-        }else{
+        } else {
             System.out.println("Non c'e corrispondenza dell livello classe allievo e docente");
         }
-        if(sezioneDocente.equalsIgnoreCase(sezioneAllievo)){
+        if (sezioneDocente.equalsIgnoreCase(sezioneAllievo)) {
             count++;
-        }else {
+        } else {
             System.out.println("Non c'e corrispondenza sezione classe allievo e docente");
         }
-        if(materia.getNomeMateria().equalsIgnoreCase(materiaDocente)){
+        if ((materia.getNomeMateria().equalsIgnoreCase(materiaDocente))&&materia.getAbilitato()==1) {
             count++;
-        }else {
-            System.out.println("Non c'e corrispondenza della materia allievo e docente");
+        } else {
+            System.out.println("Non c'e corrispondenza della materia allievo e docente oppure materia è disabilitata");
         }
-        if(count==4) return true;
+        if (count == 4) return true;
 
         return false;
     }
 
-    public void aggiungiProva(Entita entita) {
+    public void aggiungiProva() {
         boolean isStessoClasseMateria = false;
+        Persona allievo = cercaPersonaPerCf(Entita.ALLIEVO);
+        if (allievo != null) {
+            Persona docente = cercaPersonaPerCf(Entita.DOCENTE);
+            if (docente != null) {
+                Materia materia = cercaMateriaPerCodice();
+                if (materia != null) {
+                    // isStessoClasseMateria = controlloAllievoDocenteClasseMateria(allievo, docente, materia);
+                    // if (isStessoClasseMateria == true) {
+                    Integer voto = gc.dammiIntero("Inserisci voto da 1 a 10 ", "Input non valido, riprova", "I dati non sono inseriti",
+                            "Voto inserito con successo", 3, 1, 10);
+                    //Per evitare duplicate entry inserisco LocalDate time now
+                    LocalDateTime dataOraProva = LocalDateTime.now();
 
-        if (entita.equals(Entita.PROVA)) {
-            Persona allievo = cercaPersonaPerCf(Entita.ALLIEVO);
-            if (allievo != null) {
-                Persona docente = cercaPersonaPerCf(Entita.DOCENTE);
-                if (docente != null) {
-                    Materia materia = cercaMateriaPerCodice(Entita.MATERIA);
-                    if (materia != null) {
-                       // isStessoClasseMateria = controlloAllievoDocenteClasseMateria(allievo, docente, materia);
-                       // if (isStessoClasseMateria == true) {
-                            Integer voto = gc.dammiIntero("Inserisci voto da 1 a 10 ", "Input non valido, riprova", "I dati non sono inseriti",
-                                    "Voto inserito con successo", 3, 1, 10);
-                            //Per evitare duplicate entry inserisco LocalDate time now
-                            LocalDateTime dataOraProva = LocalDateTime.now();
+                    //creo oggetto
+                    Prova prova = new Prova(dataOraProva, allievo.getCf(), docente.getCf(), materia.getNomeMateria(), voto);
 
-                            //creo oggetto
-                            Prova prova = new Prova(dataOraProva, allievo.getCf(), docente.getCf(), materia.getNomeMateria(), voto);
+                    //creo querySql da passare in writeInDb
+                    String sqlQuery = "INSERT INTO prova (data_ora, cf_allievo, cf_docente, nome_materia, voto) " +
+                            "VALUES ('" + prova.getDataOra() + "', '" + prova.getCfAllievo() + "', '" + prova.getCfDocente() + "', '" + prova.getNomeMateria() + "', '" + voto + "')";
 
-                            //creo querySql da passare in writeInDb
-                        String sqlQuery = "INSERT INTO prova (data_ora, cf_allievo, cf_docente, nome_materia, voto) " +
-                                "VALUES ('" + prova.getDataOra() + "', '" + prova.getCfAllievo() + "', '" + prova.getCfDocente() + "', '" + prova.getNomeMateria() + "', '" + voto + "')";
-
-                        //scrivo in db
-                            miodb.writeInDb(sqlQuery);
-                       // }else{
-                      //      System.out.println("Docente non insegna materia per questo allievo");
-                      //  }
-                    }else {
-                        System.out.println("Materia non trovata");
-                    }
+                    //scrivo in db
+                    miodb.writeInDb(sqlQuery);
+                    // }else{
+                    //      System.out.println("Docente non insegna materia per questo allievo");
+                    //  }
                 } else {
-                    System.out.println("Docente non trovato");
+                    System.out.println("Materia non trovata");
                 }
-            }  else {
-                System.out.println("Allievo non trovato");
+            } else {
+                System.out.println("Docente non trovato");
             }
-        }else{
-            System.out.println("Entità errata, tabella di inserimento non definita");
+        } else {
+            System.out.println("Allievo non trovato");
         }
 
-    }
 
+    }
 
 
 }//
