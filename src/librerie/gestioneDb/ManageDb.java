@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-public class ManageDb {
+public class   ManageDb {
     private final String fileProperties = "src" + File.separator + "resources" + File.separator + "config.properties";
     private Connection myConn;
 

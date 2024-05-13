@@ -20,11 +20,6 @@ public class GestioneConsole {
 
 
 
-
-
-
-
-
     //i metodi return null se input errato, valore se corretto
     public Integer dammiIntero(String msgShow, String msgRetry, String msgError,
                                String msgSuccess, int tentativi, Integer rangeMin, Integer rangeMax) {
@@ -244,8 +239,9 @@ public class GestioneConsole {
                 System.out.println(msgRetry);
                 System.out.println(ANSI_RESET);
                 tentativi--;
+                input=null;
             }
-        } while (input == null || !Pattern.matches(regexMail, input) && tentativi != 0);
+        } while (!Pattern.matches(regexMail, input) && tentativi != 0);
 
         if (input == null) {
             System.out.println(ANSI_RED);

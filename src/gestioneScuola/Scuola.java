@@ -60,6 +60,7 @@ public class Scuola {
 
         } while (entitaScelta == null);
 
+
         return entitaScelta;
     }
 
@@ -181,6 +182,7 @@ public class Scuola {
                     case NON_DEFINITO:
                         System.out.println("Arrivederci!");
                         miodb.disconnect();
+                        gc.chiudiScanner();
                         return;
                     default:
                         System.out.println("Scelta non valida, riprova");
@@ -188,6 +190,7 @@ public class Scuola {
             } else {
                 System.out.println("Arrivederci!");
                 miodb.disconnect();
+                gc.chiudiScanner();
             }
         }
     }
