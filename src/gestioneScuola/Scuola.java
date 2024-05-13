@@ -498,47 +498,52 @@ public Prova cercaProvaPerDataOra(Entita entita){
         String nomeTabella = null;
         String sqlQuery = null;
         int index = 0;
-
+        ResultSet resultSet=null;
         //definisco tabella da inserire query. Inserimento ruolo errato è gestito nel gestisciSceltaMenu
-        if (entita.equals(Entita.ALLIEVO) || entita.equals(Entita.AMMINISTRATIVO) || entita.equals(Entita.DOCENTE)) {
-            //definisco tabella da inserire query.
+        if (entita.equals(Entita.ALLIEVO)
+                || entita.equals(Entita.AMMINISTRATIVO)
+                || entita.equals(Entita.DOCENTE)) {
+            //definisco tabella da inserire query
             nomeTabella = getNomeTabella(entita);
 
             //creo SqlQuery per prendere tutti abilitati
             sqlQuery = "SELECT * FROM " + nomeTabella + " WHERE abilitato = 1";
-            ResultSet resultSet = miodb.readInDb(sqlQuery);
-            try {
-                while (resultSet.next()) {
-                    String cf = resultSet.getString("cf");
-                    String nome = resultSet.getString("nome");
-                    String cognome = resultSet.getString("cognome");
-                    String sesso = resultSet.getString("sesso");
-                    String statoNascita = resultSet.getString("stato_nascita");
-                    String provinciaNascita = resultSet.getString("provincia_nascita");
-                    String comuneNascita = resultSet.getString("comune_nascita");
-                    LocalDate dataNascita = resultSet.getDate("data_nascita").toLocalDate();
-                    String email = resultSet.getString("email");
-                    int abilitato = resultSet.getInt("abilitato");
 
-                    Persona persona = new Persona(cf, nome, cognome, sesso, statoNascita,
-                            provinciaNascita, comuneNascita, dataNascita, email);
-                    persona.setEntita(entita);
-                    persone.add(persona);
+            try {
+                resultSet = miodb.readInDb(sqlQuery);
+                if (resultSet!=null) {
+                    while (resultSet.next()) {
+                        String cf = resultSet.getString("cf");
+                        String nome = resultSet.getString("nome");
+                        String cognome = resultSet.getString("cognome");
+                        String sesso = resultSet.getString("sesso");
+                        String statoNascita = resultSet.getString("stato_nascita");
+                        String provinciaNascita = resultSet.getString("provincia_nascita");
+                        String comuneNascita = resultSet.getString("comune_nascita");
+                        LocalDate dataNascita = resultSet.getDate("data_nascita").toLocalDate();
+                        String email = resultSet.getString("email");
+                        int abilitato = resultSet.getInt("abilitato");
+
+                        Persona persona = new Persona(cf, nome, cognome, sesso, statoNascita,
+                                provinciaNascita, comuneNascita, dataNascita, email);
+                        persona.setEntita(entita);
+                        persona.setAbilitato(abilitato);
+                        persone.add(persona);
+                    }
+
+                    //stampo persone dall arraylist
+                    System.out.println("Lista delle persone definite come " + nomeTabella);
+                    for (Persona persona : persone) {
+                        System.out.println(++index + " -> " + persona);
+                    }
+                    //if resultset==null
+                }else{
+                    System.out.println("Non ci sono persone definite come " + nomeTabella);
                 }
             } catch (SQLException e) {
                 System.out.println("Problema di lettura dal db: " + e);
             }
-            if (resultSet != null) {
-                //stampo persone dall arraylist
-                System.out.println("Lista delle persone definite come " + nomeTabella);
-                for (Persona persona : persone) {
-                    System.out.println(++index + " -> " + persona);
-                }
-            } else {
-                System.out.println("Non ci sono persone definite come " + nomeTabella);
-            }
-
-
+            //se entita non e una dei persona
         } else {
             System.out.println("Tabella di inserimento non defifnita");
         }
