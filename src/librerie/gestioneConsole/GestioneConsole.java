@@ -60,7 +60,34 @@ public class GestioneConsole {
         return result;
     }
 
+public String dammiRangeAnni(String msgShow, String msgRetry, String msgError,
+                             String msgSuccess, int tentativi){
+    String input = null;
 
+    String regexString = "^\\d{4}/\\d{4}$";
+        do {
+            System.out.println(msgShow);
+            input = sc.nextLine().trim();
+            if (!input.isEmpty() && !Pattern.matches(regexString, input)) {
+                System.out.println(ANSI_ORANGE);
+                System.out.println(msgRetry);
+                System.out.println(ANSI_RESET);
+                tentativi--;
+            }
+        } while (input.isEmpty() || (!input.isEmpty() && !Pattern.matches(regexString, input)) && tentativi != 0);
+        if (tentativi == 0) {
+            System.out.println(ANSI_RED);
+            System.out.println(msgError);
+            System.out.println(ANSI_RESET);
+            input = null;
+        } else {
+            System.out.println(ANSI_GREEN);
+            System.out.println(msgSuccess);
+            System.out.println(ANSI_RESET);
+        }
+
+    return input;
+}
     public String dammiStringa(String msgShow, String msgRetry, String msgError,
                                String msgSuccess, int tentativi, int rangeMinLength, int rangeMaxLength) {
         String input = null;
