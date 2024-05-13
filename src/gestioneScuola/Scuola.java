@@ -491,9 +491,6 @@ public Prova cercaProvaPerDataOra(Entita entita){
        }
     }
 
-
-
-
     public void stampaListaPersone(Entita entita) {
         String nomeTabella = null;
         String sqlQuery = null;
